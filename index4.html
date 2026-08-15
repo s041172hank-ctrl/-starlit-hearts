@@ -156,6 +156,32 @@ button{font:inherit}
 .tools{display:flex;justify-content:flex-end;gap:7px;margin-top:9px}
 .mini{cursor:pointer;border:1px solid var(--line);background:rgba(255,255,255,.05);color:#fff;border-radius:9px;padding:6px 9px;font-size:11px}
 
+
+.chapter-photo{
+  position:absolute;
+  z-index:3;
+  left:50%;
+  bottom:0;
+  transform:translateX(-50%);
+  width:min(72vw,460px);
+  height:min(70vh,620px);
+  object-fit:contain;
+  object-position:center bottom;
+  filter:drop-shadow(0 30px 28px rgba(0,0,0,.5));
+  display:none;
+}
+.chapter-photo.show{display:block}
+.character.photo-hidden{display:none}
+.rain-scene::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(180deg,rgba(18,28,48,.12),rgba(4,8,14,.2)),
+    repeating-linear-gradient(105deg,transparent 0 30px,rgba(185,220,255,.20) 31px,transparent 32px 61px);
+  pointer-events:none;
+}
+
 .overlay{
  position:absolute;z-index:30;inset:0;display:grid;place-items:center;padding:20px;
  background:rgba(3,6,13,.78);backdrop-filter:blur(14px)
@@ -187,11 +213,11 @@ button{font:inherit}
 .start-copy{min-width:0}
 .start-art{
   position:relative;
-  min-height:420px;
+  min-height:520px;
   border-radius:22px;
   overflow:hidden;
   border:1px solid rgba(255,255,255,.14);
-  background:#0b0f18;
+  background:linear-gradient(180deg,#f6f7fb 0%, #edf2fb 100%);
   box-shadow:0 20px 55px rgba(0,0,0,.38);
 }
 .start-art img{
@@ -199,14 +225,15 @@ button{font:inherit}
   height:100%;
   position:absolute;
   inset:0;
-  object-fit:cover;
-  object-position:center;
+  object-fit:contain;
+  object-position:center center;
+  padding:18px 10px 10px;
 }
 .start-art::after{
   content:"";
   position:absolute;
   inset:0;
-  background:linear-gradient(180deg,transparent 55%,rgba(4,7,13,.65));
+  background:linear-gradient(180deg,transparent 62%,rgba(4,7,13,.28));
   pointer-events:none;
 }
 .official-badge{
@@ -226,7 +253,7 @@ button{font:inherit}
 @media(max-width:700px){
  .game{min-height:0}
  .start-layout{grid-template-columns:1fr;gap:14px}
- .start-art{min-height:260px;order:-1}
+ .start-art{min-height:380px;order:-1}
  .top{left:8px;right:8px;top:8px}.logo{padding:8px 9px}.logo small{display:none}
  .chip{font-size:10px;padding:6px}.hud{padding:4px}
  .aff{left:8px;top:68px;width:210px;padding:9px}
@@ -255,7 +282,8 @@ button{font:inherit}
    <div class="hearts" id="heartText">尚未熟悉</div>
  </div>
 
- <div class="stage">
+ <div class="stage" id="stage">
+   <img id="chapterPhoto" class="chapter-photo" src="shunguang-main.jpeg" alt="葉瞬光">
    <div id="character" class="character">
      <div class="aura"></div>
      <div class="hairback"></div>
@@ -380,6 +408,16 @@ function update(){
                          state.aff>=7?"她開始主動注意你":
                          state.aff>=3?"似乎稍微熟悉了":"尚未熟悉";
 }
+function setChapterVisual(ch){
+ const photo=document.getElementById("chapterPhoto");
+ const c=document.getElementById("character");
+ const stage=document.getElementById("stage");
+ const usePhoto = ch===0;
+ photo.classList.toggle("show",usePhoto);
+ c.classList.toggle("photo-hidden",usePhoto);
+ stage.classList.toggle("rain-scene",usePhoto);
+}
+
 function setAwaken(v){
  const c=document.getElementById("character");
  c.classList.toggle("awaken",!!v);
@@ -388,6 +426,7 @@ function setAwaken(v){
 function render(){
  if(state.chapter>=scenes.length){return ending()}
  const s=scenes[state.chapter];
+ setChapterVisual(state.chapter);
  setAwaken(s.awaken);
  speaker.textContent="葉瞬光";
  sceneTag.textContent=s.tag;
@@ -422,6 +461,7 @@ function pick(c){
  update();
 }
 function ending(){
+ setChapterVisual(-1);
  setAwaken(true);
  document.getElementById("endOverlay").style.display="grid";
  let title,txt;
