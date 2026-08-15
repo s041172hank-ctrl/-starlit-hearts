@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>葉瞬光：月下之約｜非官方同人遊戲</title>
+<style>
+:root{
+  --bg:#080b12;
+  --panel:rgba(8,12,22,.82);
+  --line:rgba(255,255,255,.14);
+  --text:#f5f7ff;
+  --muted:#aeb5c8;
+  --cyan:#94eaff;
+  --blue:#5b8cff;
+  --silver:#e8efff;
+  --gold:#ffd98a;
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;font-family:system-ui,-apple-system,"PingFang TC","Noto Sans TC",sans-serif;background:#060912;color:var(--text);overflow:hidden}
+button{font:inherit}
+.game{position:relative;width:100%;height:100dvh;min-height:620px;overflow:hidden}
+.bg{
+ position:absolute;inset:0;
+ background:
+   radial-gradient(circle at 72% 18%,rgba(120,202,255,.18),transparent 28%),
+   radial-gradient(circle at 22% 70%,rgba(58,88,166,.22),transparent 34%),
+   linear-gradient(180deg,#11192a 0%,#0d1320 46%,#070a10 100%);
+}
+.moon{
+ position:absolute;width:170px;height:170px;border-radius:50%;
+ right:8vw;top:9vh;
+ background:radial-gradient(circle at 38% 35%,#fff 0 12%,#eaf4ff 38%,#bcd8ff 72%,#7896c5 100%);
+ box-shadow:0 0 70px rgba(160,210,255,.28);
+ opacity:.9
+}
+.fog{
+ position:absolute;left:-20%;right:-20%;bottom:0;height:48%;
+ background:linear-gradient(180deg,transparent,rgba(150,190,230,.06),rgba(0,0,0,.62));
+ filter:blur(5px);
+}
+.rain{
+ position:absolute;inset:0;opacity:.15;
+ background-image:repeating-linear-gradient(110deg,transparent 0 28px,rgba(255,255,255,.45) 29px,transparent 30px 58px);
+ animation:drift 12s linear infinite;
+}
+@keyframes drift{to{transform:translateX(80px)}}
+
+.top{
+ position:absolute;z-index:8;left:16px;right:16px;top:14px;
+ display:flex;align-items:center;justify-content:space-between;gap:10px
+}
+.logo,.hud{
+ border:1px solid var(--line);background:rgba(7,11,20,.62);backdrop-filter:blur(12px);
+ border-radius:16px;box-shadow:0 12px 35px rgba(0,0,0,.25)
+}
+.logo{padding:10px 13px}
+.logo b{letter-spacing:.08em}
+.logo small{display:block;color:var(--muted);font-size:11px;margin-top:2px}
+.hud{padding:8px;display:flex;gap:6px}
+.chip{background:rgba(255,255,255,.06);border-radius:10px;padding:7px 9px;font-size:12px;white-space:nowrap}
+
+.aff{
+ position:absolute;z-index:7;top:92px;left:16px;width:260px;
+ padding:12px;border-radius:16px;border:1px solid var(--line);
+ background:rgba(7,11,20,.6);backdrop-filter:blur(12px)
+}
+.aff-title{font-size:12px;color:var(--muted);display:flex;justify-content:space-between}
+.meter{height:9px;background:rgba(255,255,255,.09);border-radius:999px;overflow:hidden;margin-top:7px}
+.fill{height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--cyan),var(--silver));transition:.35s}
+.hearts{font-size:13px;margin-top:7px;color:#dfe9ff}
+
+.stage{
+ position:absolute;inset:58px 0 190px;
+ display:flex;align-items:flex-end;justify-content:center;pointer-events:none
+}
+.character{
+ position:relative;width:min(62vw,500px);height:min(72vh,660px);
+ filter:drop-shadow(0 30px 28px rgba(0,0,0,.5));
+ transition:.35s ease
+}
+.aura{
+ position:absolute;left:50%;bottom:40px;transform:translateX(-50%);
+ width:380px;height:500px;border-radius:50%;
+ background:radial-gradient(ellipse,rgba(151,226,255,.18),transparent 68%);
+ filter:blur(18px)
+}
+.body{
+ position:absolute;left:50%;bottom:0;transform:translateX(-50%);
+ width:260px;height:355px;
+ background:linear-gradient(160deg,#eef3ff 0 18%,#17213c 18% 52%,#090d19 52%);
+ clip-path:polygon(25% 0,75% 0,92% 100%,8% 100%);
+ border-radius:80px 80px 18px 18px
+}
+.neck{position:absolute;left:50%;bottom:332px;transform:translateX(-50%);width:48px;height:55px;background:#f1ceb8;border-radius:15px}
+.head{
+ position:absolute;left:50%;bottom:362px;transform:translateX(-50%);
+ width:170px;height:210px;background:#f3d3bf;border-radius:46% 46% 48% 48%
+}
+.hairback{
+ position:absolute;left:50%;bottom:338px;transform:translateX(-50%);
+ width:220px;height:285px;border-radius:48% 48% 34% 34%;
+ background:linear-gradient(120deg,#111722 0%,#202a3c 45%,#dcecff 100%);
+}
+.hairfront{
+ position:absolute;left:50%;bottom:490px;transform:translateX(-50%);
+ width:175px;height:130px;border-radius:50% 50% 40% 40%;
+ background:linear-gradient(110deg,#111722 0%,#243249 50%,#dcecff 100%);
+ clip-path:polygon(0 0,100% 0,94% 65%,70% 42%,52% 88%,36% 45%,7% 70%)
+}
+.eye{position:absolute;bottom:465px;width:13px;height:10px;border-radius:50%;background:#68d6ff;box-shadow:0 0 12px rgba(104,214,255,.7)}
+.eye.left{left:calc(50% - 40px)} .eye.right{left:calc(50% + 27px)}
+.mouth{position:absolute;left:50%;bottom:430px;transform:translateX(-50%);width:28px;height:8px;border-bottom:2px solid #b96e72;border-radius:50%}
+.sword{
+ position:absolute;left:calc(50% + 92px);bottom:70px;width:12px;height:420px;
+ transform:rotate(14deg);transform-origin:bottom;
+ background:linear-gradient(90deg,#61718f,#effaff,#83d9ff);
+ box-shadow:0 0 18px rgba(130,220,255,.5);
+ border-radius:8px
+}
+.sword:after{
+ content:"";position:absolute;left:-34px;bottom:22px;width:80px;height:10px;border-radius:10px;
+ background:#202a40;border:2px solid #9eb8e5
+}
+.formtag{
+ position:absolute;left:50%;bottom:32px;transform:translateX(-50%);
+ padding:7px 12px;border-radius:999px;background:rgba(7,12,22,.75);
+ border:1px solid rgba(159,226,255,.28);font-size:12px;color:#dff7ff
+}
+.character.awaken .hairback,.character.awaken .hairfront{
+ background:linear-gradient(120deg,#f5fbff 0%,#d7e9ff 48%,#91c9ff 100%)
+}
+.character.awaken .aura{
+ background:radial-gradient(ellipse,rgba(171,233,255,.35),rgba(92,122,255,.08),transparent 70%)
+}
+.character.awaken .sword{box-shadow:0 0 32px rgba(190,240,255,.8)}
+.character.hidden{opacity:0;transform:translateY(25px)}
+
+.box{
+ position:absolute;z-index:10;left:50%;transform:translateX(-50%);
+ width:min(960px,calc(100% - 24px));bottom:14px;
+ border:1px solid var(--line);background:var(--panel);backdrop-filter:blur(18px);
+ border-radius:22px;padding:17px;box-shadow:0 24px 80px rgba(0,0,0,.55)
+}
+.speaker{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+.name{font-size:18px;font-weight:800}
+.tag{font-size:11px;background:linear-gradient(90deg,#4768b2,#74cde8);padding:4px 8px;border-radius:999px}
+.text{font-size:16px;line-height:1.65;min-height:52px}
+.choices{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:12px}
+.choice{
+ border:1px solid rgba(255,255,255,.11);background:rgba(255,255,255,.065);color:#fff;
+ border-radius:14px;padding:12px;text-align:left;cursor:pointer;transition:.18s
+}
+.choice:hover{transform:translateY(-2px);background:rgba(130,205,255,.12);border-color:rgba(140,220,255,.5)}
+.choice strong{display:block;margin-bottom:3px}.choice small{color:var(--muted)}
+.tools{display:flex;justify-content:flex-end;gap:7px;margin-top:9px}
+.mini{cursor:pointer;border:1px solid var(--line);background:rgba(255,255,255,.05);color:#fff;border-radius:9px;padding:6px 9px;font-size:11px}
+
+.overlay{
+ position:absolute;z-index:30;inset:0;display:grid;place-items:center;padding:20px;
+ background:rgba(3,6,13,.78);backdrop-filter:blur(14px)
+}
+.card{
+ width:min(760px,100%);border:1px solid var(--line);border-radius:26px;padding:25px;
+ background:rgba(8,12,22,.95);box-shadow:0 28px 90px rgba(0,0,0,.6)
+}
+.title{
+ margin:2px 0 8px;font-size:clamp(36px,8vw,70px);line-height:1;
+ background:linear-gradient(90deg,#fff,#cceaff,#7baeff);-webkit-background-clip:text;color:transparent
+}
+.sub{color:var(--muted);line-height:1.65}
+.note{margin:16px 0;padding:12px;border-radius:13px;background:rgba(255,255,255,.045);border:1px solid var(--line);font-size:13px;color:#cbd3e6}
+.start{
+ cursor:pointer;border:0;border-radius:14px;padding:12px 18px;color:white;font-weight:800;
+ background:linear-gradient(90deg,#4568b4,#65cce9);box-shadow:0 12px 32px rgba(75,150,220,.25)
+}
+.toast{position:absolute;z-index:50;right:14px;top:75px;padding:10px 13px;border-radius:11px;background:#111a2a;border:1px solid var(--line);opacity:0;transition:.2s}
+.toast.show{opacity:1}
+
+
+.start-layout{
+  display:grid;
+  grid-template-columns:minmax(0,1.05fr) minmax(280px,.95fr);
+  gap:22px;
+  align-items:center;
+}
+.start-copy{min-width:0}
+.start-art{
+  position:relative;
+  min-height:420px;
+  border-radius:22px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.14);
+  background:#0b0f18;
+  box-shadow:0 20px 55px rgba(0,0,0,.38);
+}
+.start-art img{
+  width:100%;
+  height:100%;
+  position:absolute;
+  inset:0;
+  object-fit:cover;
+  object-position:center;
+}
+.start-art::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg,transparent 55%,rgba(4,7,13,.65));
+  pointer-events:none;
+}
+.official-badge{
+  position:absolute;
+  z-index:2;
+  left:12px;
+  bottom:12px;
+  padding:7px 10px;
+  border-radius:999px;
+  font-size:11px;
+  color:#e9f8ff;
+  border:1px solid rgba(255,255,255,.18);
+  background:rgba(6,10,18,.75);
+  backdrop-filter:blur(10px);
+}
+
+@media(max-width:700px){
+ .game{min-height:0}
+ .start-layout{grid-template-columns:1fr;gap:14px}
+ .start-art{min-height:260px;order:-1}
+ .top{left:8px;right:8px;top:8px}.logo{padding:8px 9px}.logo small{display:none}
+ .chip{font-size:10px;padding:6px}.hud{padding:4px}
+ .aff{left:8px;top:68px;width:210px;padding:9px}
+ .stage{inset:48px 0 245px}.character{width:94vw;height:min(58vh,520px);transform:scale(.9);transform-origin:bottom}
+ .box{bottom:7px;width:calc(100% - 14px);padding:13px;border-radius:18px}
+ .text{font-size:14px;min-height:44px}.choices{grid-template-columns:1fr;gap:6px}
+ .choice{padding:9px 10px}.tools{margin-top:6px}
+}
+</style>
+</head>
+<body>
+<div class="game">
+ <div class="bg"><div class="moon"></div><div class="rain"></div><div class="fog"></div></div>
+
+ <div class="top">
+   <div class="logo"><b>月下之約</b><small>葉瞬光 Fan Game · 非官方同人作品</small></div>
+   <div class="hud">
+     <div class="chip">章節 <span id="chapter">1</span>/5</div>
+     <div class="chip">關鍵事件 <span id="key">0</span>/3</div>
+   </div>
+ </div>
+
+ <div class="aff">
+   <div class="aff-title"><span>葉瞬光 好感度</span><b id="affNum">0</b></div>
+   <div class="meter"><div class="fill" id="affFill"></div></div>
+   <div class="hearts" id="heartText">尚未熟悉</div>
+ </div>
+
+ <div class="stage">
+   <div id="character" class="character">
+     <div class="aura"></div>
+     <div class="hairback"></div>
+     <div class="body"></div>
+     <div class="neck"></div>
+     <div class="head"></div>
+     <div class="hairfront"></div>
+     <div class="eye left"></div><div class="eye right"></div><div class="mouth"></div>
+     <div class="sword"></div>
+     <div class="formtag" id="formTag">常態</div>
+   </div>
+ </div>
+
+ <div class="box">
+   <div class="speaker"><div class="name" id="speaker">旁白</div><div class="tag" id="sceneTag">序章</div></div>
+   <div class="text" id="text">新艾利都的雨夜，你在一場意外後第一次與葉瞬光並肩行動。</div>
+   <div class="choices" id="choices"></div>
+   <div class="tools">
+     <button class="mini" onclick="saveGame()">💾 儲存</button>
+     <button class="mini" onclick="loadGame()">📂 讀取</button>
+     <button class="mini" onclick="resetGame()">↻ 重來</button>
+   </div>
+ </div>
+
+ <div class="overlay" id="startOverlay">
+  <div class="card">
+    <div class="start-layout">
+      <div class="start-copy">
+        <div style="font-size:12px;color:#86dfff;letter-spacing:.18em;font-weight:800">ZENLESS ZONE ZERO · UNOFFICIAL FAN GAME</div>
+        <h1 class="title">葉瞬光<br>月下之約</h1>
+        <p class="sub">第一版只開放葉瞬光單人攻略線。你將在五個章節裡逐漸與她建立信任，某些看似普通的回答會成為最後結局的關鍵。</p>
+        <div class="note">本作品為玩家自製、非商業、非官方同人內容。角色權利歸原權利人所有；遊戲內戀愛劇情為原創虛構，不代表官方設定。</div>
+        <button class="start" onclick="startGame()">開始攻略葉瞬光 ✦</button>
+      </div>
+      <div class="start-art">
+        <img
+          src="shunguang-main.jpeg"
+          alt="葉瞬光官方宣傳圖"
+        >
+        <div class="official-badge">葉瞬光主視覺</div>
+      </div>
+    </div>
+  </div>
+ </div>
+
+ <div class="overlay" id="endOverlay" style="display:none">
+   <div class="card">
+     <div style="font-size:12px;color:#86dfff;letter-spacing:.16em;font-weight:800">ENDING</div>
+     <h2 id="endTitle" style="font-size:34px;margin:8px 0"></h2>
+     <div id="endText" class="note" style="font-size:15px;line-height:1.8"></div>
+     <button class="start" onclick="resetGame()">重新攻略</button>
+   </div>
+ </div>
+ <div class="toast" id="toast"></div>
+</div>
+
+<script>
+const scenes=[
+ {
+  tag:"第一章 · 雨夜",
+  text:"任務結束後，雨勢突然變大。葉瞬光站在屋簷下，看了一眼你手中唯一的一把傘。<br><br>「你先走吧。我等雨小一點。」",
+  choices:[
+   ["把傘遞給她，自己淋雨","你似乎只想到她。",3,false],
+   ["說『一起走吧，傘夠大』","自然地拉近距離。",4,true],
+   ["陪她一起等雨停","安靜也是一種陪伴。",2,false],
+   ["說自己還有事先走","她沒有阻止你。",-1,false]
+  ]
+ },
+ {
+  tag:"第二章 · 劍與茶",
+  text:"安全屋裡，葉瞬光正在擦拭自己的劍。桌上有兩杯剛泡好的茶，其中一杯被她推到你面前。<br><br>「別多想，只是剛好多泡了一杯。」",
+  choices:[
+   ["接過茶，說聲謝謝","不戳破她的說法。",3,false],
+   ["問她平常是不是也這樣照顧別人","她的手停了一瞬。",1,false],
+   ["坐在旁邊陪她整理裝備","你沒有打擾她。",3,false],
+   ["笑著說『原來是特別幫我泡的』","她移開了視線。",4,true]
+  ]
+ },
+ {
+  tag:"第三章 · 明心",
+  awaken:true,
+  text:"戰鬥進入最危險的瞬間。葉瞬光切換了形態，銀白髮絲在冷光裡揚起。她回頭看向你。<br><br>「別離我太遠。」",
+  choices:[
+   ["回答『我一直都在』","她第一次沒有立刻移開視線。",5,true],
+   ["說『妳先顧好自己』","關心藏在命令裡。",2,false],
+   ["跟上她的節奏並肩作戰","行動比語言更直接。",3,false],
+   ["故意說『這樣的妳更帥』","她差點被你打亂節奏。",1,false]
+  ]
+ },
+ {
+  tag:"第四章 · 深夜便利店",
+  text:"凌晨兩點，你們完成任務後走進便利店。葉瞬光拿了兩瓶飲料，結帳後自然地把其中一瓶丟給你。<br><br>「明天沒有任務。你有安排嗎？」",
+  choices:[
+   ["約她去沒有以骸的地方走走","這聽起來很像約會。",4,true],
+   ["說想睡一整天","她輕輕笑了一聲。",1,false],
+   ["反問她想去哪","把決定權交給她。",3,false],
+   ["說可以一起練劍","她認真考慮了。",2,false]
+  ]
+ },
+ {
+  tag:"第五章 · 月下",
+  text:"高樓屋頂，城市的燈光在腳下延伸。葉瞬光靠著欄杆，沉默了很久。<br><br>「有些話……如果現在不說，也許之後就沒有機會了。」",
+  final:true,
+  choices:[
+   ["「那就現在說。我會聽。」","不替她做決定，只留下位置。",4,true],
+   ["「其實我也有話想對妳說。」","你決定先踏出那一步。",5,true],
+   ["安靜站到她身邊","有時候不用急著得到答案。",2,false],
+   ["開玩笑轉移氣氛","她最後還是沒有說出口。",-2,false]
+  ]
+ }
+];
+
+let state={chapter:0,aff:0,key:0,started:false};
+
+function update(){
+ chapter.textContent=Math.min(state.chapter+1,5);
+ key.textContent=state.key;
+ affNum.textContent=state.aff;
+ affFill.style.width=Math.max(0,Math.min(100,state.aff*5))+"%";
+ heartText.textContent = state.aff>=17?"她已經無法忽視你":
+                         state.aff>=12?"彼此的距離正在改變":
+                         state.aff>=7?"她開始主動注意你":
+                         state.aff>=3?"似乎稍微熟悉了":"尚未熟悉";
+}
+function setAwaken(v){
+ const c=document.getElementById("character");
+ c.classList.toggle("awaken",!!v);
+ formTag.textContent=v?"明心境 · 覺醒形態":"常態";
+}
+function render(){
+ if(state.chapter>=scenes.length){return ending()}
+ const s=scenes[state.chapter];
+ setAwaken(s.awaken);
+ speaker.textContent="葉瞬光";
+ sceneTag.textContent=s.tag;
+ text.innerHTML=s.text;
+ const box=document.getElementById("choices"); box.innerHTML="";
+ s.choices.forEach((c,i)=>{
+   const b=document.createElement("button");
+   b.className="choice";
+   b.innerHTML=`<strong>${c[0]}</strong><small>${c[1]}</small>`;
+   b.onclick=()=>pick(c);
+   box.appendChild(b);
+ });
+ update();
+}
+function pick(c){
+ state.aff+=c[2];
+ if(c[3])state.key++;
+ state.chapter++;
+ localStorage.setItem("yeShunguangAuto",JSON.stringify(state));
+ if(state.chapter>=scenes.length){ending();return}
+ const reaction=c[2]>=5?"她看了你很久，最後很輕地笑了。":
+                c[2]>=4?"她像是想說什麼，最後卻只點了點頭。":
+                c[2]>=2?"她的神情比剛才柔和了一些。":
+                c[2]<0?"她沉默了一會。":"她沒有特別回應。";
+ speaker.textContent="旁白";
+ sceneTag.textContent="章節間幕";
+ text.innerHTML=reaction+`<br><span style="color:${c[2]>=0?'#9eeaff':'#ff9ba8'}">好感 ${c[2]>=0?'+':''}${c[2]}</span>`;
+ choices.innerHTML="";
+ const b=document.createElement("button");
+ b.className="choice"; b.innerHTML="<strong>繼續</strong><small>進入下一章</small>";
+ b.onclick=render; choices.appendChild(b);
+ update();
+}
+function ending(){
+ setAwaken(true);
+ document.getElementById("endOverlay").style.display="grid";
+ let title,txt;
+ if(state.aff>=18 && state.key>=3){
+   title="TRUE END · 月下之約";
+   txt="葉瞬光沉默了幾秒，最後走到你面前。<br><br>「……我本來以為，有些事不需要說出口。」<br><br>她抬眼看你，月光落在銀白髮絲上。<br><br>「但如果是你，我想試著說一次。」<br><br><b>她沒有把最後一句交給夜風，而是親口告訴了你。</b><br><br>好感度："+state.aff+" ／ 關鍵事件："+state.key;
+ }else if(state.aff>=12){
+   title="GOOD END · 下一次任務之外";
+   txt="你們沒有在今晚替關係定下一個名字。但離開屋頂前，葉瞬光第一次主動問了你一句：<br><br>「明天沒有任務……還要見面嗎？」<br><br><b>答案似乎已經很明顯了。</b><br><br>好感度："+state.aff+" ／ 關鍵事件："+state.key;
+ }else{
+   title="NORMAL END · 並肩之人";
+   txt="你們仍然是最可靠的搭檔。某些話沒有被說出口，但每次戰鬥開始時，她依然會下意識確認你是否在身後。<br><br>也許還需要更多時間。<br><br>好感度："+state.aff+" ／ 關鍵事件："+state.key;
+ }
+ endTitle.textContent=title; endText.innerHTML=txt;
+}
+function startGame(){startOverlay.style.display="none";state.started=true;render()}
+function saveGame(){localStorage.setItem("yeShunguangSave",JSON.stringify(state));toastMsg("已儲存")}
+function loadGame(){
+ const x=localStorage.getItem("yeShunguangSave");
+ if(!x){toastMsg("沒有存檔");return}
+ state=JSON.parse(x); startOverlay.style.display="none";endOverlay.style.display="none";render();toastMsg("讀取完成")
+}
+function resetGame(){
+ state={chapter:0,aff:0,key:0,started:true};
+ endOverlay.style.display="none";startOverlay.style.display="none";render()
+}
+function toastMsg(t){
+ toast.textContent=t;toast.classList.add("show");
+ setTimeout(()=>toast.classList.remove("show"),1300)
+}
+update();
+</script>
+</body>
+</html>
