@@ -204,56 +204,147 @@ button{font:inherit}
 .toast.show{opacity:1}
 
 
+
 .start-layout{
   display:grid;
-  grid-template-columns:minmax(0,1.05fr) minmax(280px,.95fr);
-  gap:22px;
+  grid-template-columns:minmax(0,1fr) minmax(320px,430px);
+  gap:26px;
   align-items:center;
 }
 .start-copy{min-width:0}
-.start-art{
+.start-eyebrow{
+  font-size:12px;
+  color:#8fdcff;
+  letter-spacing:.18em;
+  font-weight:800;
+  margin-bottom:8px;
+}
+.start-summary{
+  color:#dbe5f7;
+  line-height:1.85;
+  font-size:18px;
+  margin:0 0 18px;
+}
+.start-points{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  margin:14px 0 18px;
+}
+.start-points div{
+  padding:12px;
+  border-radius:14px;
+  background:rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.08);
+  color:#d9e8ff;
+  font-size:13px;
+}
+.start-points b{
+  display:block;
+  margin-bottom:4px;
+  color:#fff;
+}
+.start-hero{
   position:relative;
-  min-height:520px;
-  border-radius:22px;
-  overflow:hidden;
-  border:1px solid rgba(255,255,255,.14);
-  background:linear-gradient(180deg,#f6f7fb 0%, #edf2fb 100%);
-  box-shadow:0 20px 55px rgba(0,0,0,.38);
+  min-height:540px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
 }
-.start-art img{
-  width:100%;
-  height:100%;
+.hero-glow{
   position:absolute;
-  inset:0;
-  object-fit:contain;
-  object-position:center center;
-  padding:18px 10px 10px;
+  inset:auto 4% 8% 4%;
+  height:72%;
+  border-radius:34px;
+  background:
+    radial-gradient(circle at 50% 35%, rgba(136,214,255,.34), transparent 34%),
+    radial-gradient(circle at 50% 100%, rgba(90,124,255,.30), transparent 42%),
+    linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+  filter:blur(2px);
+  border:1px solid rgba(255,255,255,.08);
 }
-.start-art::after{
+.hero-card{
+  position:absolute;
+  right:0;
+  left:9%;
+  top:6%;
+  bottom:3%;
+  border-radius:34px;
+  background:linear-gradient(180deg,rgba(11,17,30,.12),rgba(11,17,30,.35));
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:0 26px 70px rgba(0,0,0,.36);
+  backdrop-filter:blur(5px);
+}
+.hero-card::before{
   content:"";
   position:absolute;
-  inset:0;
-  background:linear-gradient(180deg,transparent 62%,rgba(4,7,13,.28));
-  pointer-events:none;
+  inset:12px;
+  border-radius:28px;
+  background:
+    linear-gradient(145deg, rgba(255,255,255,.05), transparent 30%),
+    radial-gradient(circle at 25% 25%, rgba(124,198,255,.08), transparent 28%);
+  border:1px solid rgba(255,255,255,.05);
 }
-.official-badge{
-  position:absolute;
+.hero-image{
+  position:relative;
   z-index:2;
-  left:12px;
-  bottom:12px;
-  padding:7px 10px;
+  width:min(100%,410px);
+  max-height:540px;
+  object-fit:cover;
+  object-position:center;
+  border-radius:28px;
+  box-shadow:0 24px 80px rgba(0,0,0,.38);
+}
+.hero-badge{
+  position:absolute;
+  z-index:3;
+  left:5%;
+  top:7%;
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.hero-badge span,
+.hero-mini{
+  padding:7px 11px;
   border-radius:999px;
   font-size:11px;
-  color:#e9f8ff;
-  border:1px solid rgba(255,255,255,.18);
-  background:rgba(6,10,18,.75);
+  color:#e9f7ff;
+  background:rgba(7,12,22,.78);
+  border:1px solid rgba(255,255,255,.14);
   backdrop-filter:blur(10px);
 }
-
+.hero-mini{
+  position:absolute;
+  z-index:3;
+  left:8%;
+  bottom:9%;
+}
+.start-actions{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.sub-note{
+  color:#95a9cb;
+  font-size:13px;
+}
 @media(max-width:700px){
  .game{min-height:0}
- .start-layout{grid-template-columns:1fr;gap:14px}
- .start-art{min-height:380px;order:-1}
+ .start-layout{grid-template-columns:1fr;gap:16px}
+ .start-hero{min-height:360px;order:-1}
+ .hero-image{width:min(100%,300px);max-height:340px}
+ .hero-card{left:4%;right:4%;top:5%;bottom:2%}
+ .start-points{grid-template-columns:1fr}
+ .top{left:8px;right:8px;top:8px}.logo{padding:8px 9px}.logo small{display:none}
+ .chip{font-size:10px;padding:6px}.hud{padding:4px}
+ .aff{left:8px;top:68px;width:210px;padding:9px}
+ .stage{inset:48px 0 245px}.character{width:94vw;height:min(58vh,520px);transform:scale(.9);transform-origin:bottom}
+ .box{bottom:7px;width:calc(100% - 14px);padding:13px;border-radius:18px}
+ .text{font-size:14px;min-height:44px}.choices{grid-template-columns:1fr;gap:6px}
+ .choice{padding:9px 10px}.tools{margin-top:6px}
+
  .top{left:8px;right:8px;top:8px}.logo{padding:8px 9px}.logo small{display:none}
  .chip{font-size:10px;padding:6px}.hud{padding:4px}
  .aff{left:8px;top:68px;width:210px;padding:9px}
@@ -312,18 +403,30 @@ button{font:inherit}
   <div class="card">
     <div class="start-layout">
       <div class="start-copy">
-        <div style="font-size:12px;color:#86dfff;letter-spacing:.18em;font-weight:800">ZENLESS ZONE ZERO · UNOFFICIAL FAN GAME</div>
+        <div class="start-eyebrow">ZENLESS ZONE ZERO · UNOFFICIAL FAN GAME</div>
         <h1 class="title">葉瞬光<br>月下之約</h1>
-        <p class="sub">第一版只開放葉瞬光單人攻略線。你將在五個章節裡逐漸與她建立信任，某些看似普通的回答會成為最後結局的關鍵。</p>
+        <p class="start-summary">這次我把首頁重新整理成更像戀愛遊戲主選單的樣子。進入故事後，第一章會使用你的全身立繪；首頁則改成更有氣氛的近距離 CG。</p>
+        <div class="start-points">
+          <div><b>單人攻略線</b>目前只開放葉瞬光一條完整路線。</div>
+          <div><b>多結局</b>好感度與關鍵事件會影響結局。</div>
+          <div><b>第一章立繪</b>進入雨夜章節後會切回全身站姿圖。</div>
+          <div><b>非官方同人</b>本作為粉絲自製、免費、非商業內容。</div>
+        </div>
         <div class="note">本作品為玩家自製、非商業、非官方同人內容。角色權利歸原權利人所有；遊戲內戀愛劇情為原創虛構，不代表官方設定。</div>
-        <button class="start" onclick="startGame()">開始攻略葉瞬光 ✦</button>
+        <div class="start-actions">
+          <button class="start" onclick="startGame()">開始攻略葉瞬光 ✦</button>
+          <span class="sub-note">首頁使用自拍風 CG，章節內使用立繪</span>
+        </div>
       </div>
-      <div class="start-art">
-        <img
-          src="shunguang-main.jpeg"
-          alt="葉瞬光官方宣傳圖"
-        >
-        <div class="official-badge">葉瞬光主視覺</div>
+      <div class="start-hero">
+        <div class="hero-card"></div>
+        <div class="hero-glow"></div>
+        <div class="hero-badge">
+          <span>首頁 CG</span>
+          <span>葉瞬光</span>
+        </div>
+        <img class="hero-image" src="shunguang-selfie.jpg" alt="葉瞬光首頁圖片">
+        <div class="hero-mini">月下之約 · 首頁主視覺</div>
       </div>
     </div>
   </div>
